@@ -9,11 +9,12 @@ public class _3_frog_jump_problem {
 		
 		Scanner sc = new Scanner(System.in);
 		int[] arr = {30,10,60,10,60,50}; 
-		System.out.println(solution1(arr, arr.length-1));
+//		System.out.println(solution1(arr, arr.length-1));
 		int[] dp = new int[arr.length];
 		Arrays.fill(dp, -1);
 //		System.out.println(solution2(arr,arr.length-1,dp));
 		System.out.println(solution3(arr,arr.length-1,dp));
+		System.out.println(solution4(arr));
 		
 
 	}
@@ -40,15 +41,30 @@ public class _3_frog_jump_problem {
 //	using tabulation
 	private static int solution3(int[] arr,  int index , int[] dp) {
 		dp[0] = 0;
-		dp[1] = Math.abs(arr[0]-arr[1]);
-		for(int i = 2;i<arr.length;i++) {
+		for(int i = 1;i<arr.length;i++) {
 			int jumpOne = dp[i - 1] + Math.abs(arr[i] - arr[i - 1]);
-	        int jumpTwo = dp[i - 2] + Math.abs(arr[i] - arr[i - 2]);
+			int jumpTwo = Integer.MAX_VALUE;
+			if(i>1)	
+				jumpTwo = dp[i - 2] + Math.abs(arr[i] - arr[i - 2]);
 	        dp[i] = Math.min(jumpOne, jumpTwo); 
 		}
 		
 		
 		return dp[index];
+	}
+//	using space optimization
+	private static int solution4(int[] arr) {
+		int pop = 0,prev = 0;
+		for(int i = 1;i<arr.length;i++) {
+			int jumpOne = prev + Math.abs(arr[i]-arr[i-1]);
+			int jumpTwo = Integer.MAX_VALUE;
+			if(i>1)	jumpTwo = pop + Math.abs(arr[i]-arr[i-2]);
+			int curr = Math.min(jumpOne, jumpTwo);
+			pop = prev;
+			prev = curr;
+		}
+		return prev;
+		
 	}
 
 }
